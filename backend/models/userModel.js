@@ -21,6 +21,11 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    role: {
+      type: String,
+      enum: ['user', 'publisher'],
+      default: 'user',
+    },
   },
   {
     timestamps: true,
@@ -28,3 +33,5 @@ const userSchema = mongoose.Schema(
 );
 
 module.exports = mongoose.model('User', userSchema);
+
+// new update
