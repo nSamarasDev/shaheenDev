@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 
-const User = require('../models/userModel');
+const User = require('../models/UserModel');
 const Employee = require('../models/EmployeeModel');
 
 // @dec    Get Employee
