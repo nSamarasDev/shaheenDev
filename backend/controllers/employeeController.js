@@ -3,10 +3,10 @@ const asyncHandler = require('express-async-handler');
 const User = require('../models/UserModel');
 const Employee = require('../models/EmployeeModel');
 
-// @dec    Get Employee
+// @dec    Get all Employees
 // @route  GET /api/employee
 //@access  Private
-const getEmployee = asyncHandler(async (req, res) => {
+const getEmployees = asyncHandler(async (req, res) => {
   // Get user using id in jwt
   const user = await User.findById(req.user.id);
 
@@ -15,9 +15,9 @@ const getEmployee = asyncHandler(async (req, res) => {
     throw new Error('User not found');
   }
 
-  const employee = await Employee.find({ user: req.user.id });
+  const employees = await Employee.find({ user: req.user.id });
 
-  res.status(200).json(employee);
+  res.status(200).json(employees);
 });
 
 // @dec    Create new Employee
@@ -76,7 +76,35 @@ const createEmployee = asyncHandler(async (req, res) => {
   res.status(201).json(employee);
 });
 
+// @dec    Get spcific employee by id
+// @route  GET /api/employees/:id
+//@access  Private
+const getEmployee = asyncHandler(async (req, res) => {
+  // Get user using id in jwt
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  const employee = await Employee.findById(req.params.id);
+
+  if (!employee) {
+    res.status(404);
+    throw new Error('Employee not found');
+  }
+
+  if (employee.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  res.status(200).json(employee);
+});
+
 module.exports = {
-  getEmployee,
+  getEmployees,
   createEmployee,
+  getEmployee,
 };
