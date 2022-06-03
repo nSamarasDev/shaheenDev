@@ -103,8 +103,72 @@ const getEmployee = asyncHandler(async (req, res) => {
   res.status(200).json(employee);
 });
 
+// @dec    Delete spcific employee by id
+// @route  DELETE /api/employees/:id
+//@access  Private
+const deleteEmployee = asyncHandler(async (req, res) => {
+  // Get user using id in jwt
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  const employee = await Employee.findById(req.params.id);
+
+  if (!employee) {
+    res.status(404);
+    throw new Error('Employee not found');
+  }
+
+  if (employee.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  await employee.remove();
+
+  res.status(200).json({ success: true });
+});
+
+// @dec    Update spcific employee by id
+// @route  PUT /api/employees/:id
+//@access  Private
+const updateEmployee = asyncHandler(async (req, res) => {
+  // Get user using id in jwt
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  const employee = await Employee.findById(req.params.id);
+
+  if (!employee) {
+    res.status(404);
+    throw new Error('Employee not found');
+  }
+
+  if (employee.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  const updatedEmployee = await Employee.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  );
+
+  res.status(200).json(updatedEmployee);
+});
+
 module.exports = {
   getEmployees,
   createEmployee,
   getEmployee,
+  deleteEmployee,
+  updateEmployee,
 };
