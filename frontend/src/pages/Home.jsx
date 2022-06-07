@@ -11,11 +11,15 @@ function Home() {
         </section>
 
         <Link to='/new-ticket' className='btn btn-reverse btn-block'>
-            <FaQuestionCircle /> Create New Employee
+            <FaQuestionCircle /> Create New Ticket
         </Link>
 
         <Link to='/tickets' className='btn btn-block'>
-            <FaTicketAlt /> View My Employees
+            <FaTicketAlt /> View My Tickets
+        </Link>
+        
+        <Link to='/admin' className='btn btn-block'>
+            <FaTicketAlt /> Adminstrative area
         </Link>
     </>
   )
